@@ -3,50 +3,334 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Casino Zeus · Administrador Zeta</title>
+  <meta name="theme-color" content="#0d0e15">
+  <meta name="description" content="Al Baje! Club de cartas. Conocé UNO y Cartas Clásicas y contactá al administrador Zeta para crear tu usuario.">
+  <title>Al Baje! · Club de cartas</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d0e15'/%3E%3Ctext x='32' y='48' text-anchor='middle' font-size='52' fill='%23edcb7d'%3E%E2%99%A0%3C/text%3E%3C/svg%3E">
   <style>
+    :root { color-scheme: dark; --bg: #0d0e15; --panel: #131b26; --line: #2a3243; --muted: #aeb8ca; --gold: #edcb7d; --text: #f6f6f8; --wa: #28df83; }
     * { box-sizing: border-box; }
-    html, body { margin: 0; width: 100%; height: 100%; background: #080b10; }
-    body { display: flex; flex-direction: column; height: 100vh; height: 100dvh; overflow: hidden; color: #fff; font: 16px/1.5 Arial, sans-serif; }
-    #casino { display: block; flex: 1 1 auto; width: 100%; min-height: 0; border: 0; }
-    .barra-contacto { flex: 0 0 auto; padding: 10px 16px; padding-bottom: max(12px, env(safe-area-inset-bottom)); background: #10171f; text-align: center; }
-    .administrador { margin: 0 0 7px; font-size: 13px; }
-    .crear-usuario { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; max-width: 600px; min-height: 54px; margin: 0 auto; padding: 12px 18px; border-radius: 10px; background: #28df83; color: #062715; font-size: 18px; font-weight: bold; text-decoration: none; touch-action: manipulation; }
-    .crear-usuario svg { flex: 0 0 24px; width: 24px; height: 24px; fill: currentColor; }
-    .crear-usuario:active { transform: scale(.99); }
-    .crear-usuario:focus-visible { outline: 3px solid #4be5f6; outline-offset: 3px; }
-    .aviso { margin: 8px 0 0; font-size: 13px; }
-    .aviso[hidden] { display: none; }
+    html { scroll-behavior: smooth; scroll-padding-top: 28px; }
+    body { margin: 0; background: radial-gradient(ellipse at 100% 38%, #25132280 0, transparent 56%), var(--bg); color: var(--text); font: 15px/1.6 Arial, Helvetica, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; -webkit-tap-highlight-color: transparent; }
+    a, button { touch-action: manipulation; }
+    a:focus-visible, summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 5px; border-radius: 4px; }
+    ::selection { background: var(--gold); color: var(--bg); }
+    .wrap { width: min(1180px, calc(100% - 80px)); margin-inline: auto; }
+    .skip { position: fixed; top: 8px; left: 8px; z-index: 30; padding: 10px 16px; background: var(--gold); color: #141414; transform: translateY(-180%); }
+    .skip:focus { transform: translateY(0); }
+    .sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+    .responsible { background: #090c12; border-bottom: 1px solid #202430; padding: 7px 12px; text-align: center; font-size: 10px; letter-spacing: .025em; color: #aeb8ca; }
+    .responsible span { display: inline-block; margin-right: 10px; padding: 0 5px; border: 1px solid #555e70; border-radius: 3px; color: #fff; font-weight: 700; }
+    .header { display: flex; align-items: center; gap: 64px; min-height: 111px; border-bottom: 1px solid var(--line); }
+    .brand { display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0; line-height: 1; }
+    .brand-mark { font: 42px/1 Georgia, serif; color: var(--gold); }
+    .brand-name { display: block; font-size: 27px; letter-spacing: -1.5px; font-weight: 800; }
+    .brand-name b { color: var(--gold); }
+    .brand-caption { display: block; margin-top: 8px; color: var(--gold); text-transform: uppercase; font-size: 7px; letter-spacing: 3.7px; }
+    .nav { display: flex; align-self: stretch; align-items: center; gap: 30px; color: var(--muted); font-size: 12px; }
+    .nav a { display: grid; place-items: center; height: 100%; position: relative; }
+    .nav a:hover { color: var(--gold); }
+    .nav a:first-child { color: var(--gold); }
+    .nav a:first-child::after { content: ''; position: absolute; bottom: -1px; width: 24px; height: 2px; background: var(--gold); }
+    .header-contact { margin-left: auto; display: inline-flex; gap: 10px; align-items: center; border: 1px solid #5c5139; padding: 10px 16px; border-radius: 7px; font-size: 12px; color: var(--gold); }
+    .header-contact:hover { background: #edcb7d0c; }
+    .arrow { font-size: 20px; line-height: 1; }
+    .hero { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 30px; padding-block: 46px 37px; }
+    .eyebrow { display: block; color: var(--gold); font-size: 10px; font-weight: 700; letter-spacing: 2.3px; text-transform: uppercase; }
+    h1 { margin: 18px 0 20px; font-size: clamp(50px, 6vw, 79px); letter-spacing: -4.7px; line-height: 1.02; font-weight: 700; }
+    h1 em { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; color: var(--gold); letter-spacing: -4px; }
+    .hero-copy { margin: 0; color: var(--muted); font-size: 14px; }
+    .hero-side { position: relative; width: 265px; border-left: 1px solid #393240; padding-left: 24px; display: flex; align-items: center; gap: 17px; margin-right: 22px; }
+    .hero-side::after { content: '♠'; position: absolute; right: -12px; bottom: -54px; font: 150px/1 Georgia, serif; color: #33263866; z-index: -1; }
+    .hero-symbol { font: 78px/1 Georgia, serif; color: var(--gold); }
+    .hero-side p { margin: 0; font-size: 17px; line-height: 1.4; }
+    .hero-side small { display: block; color: var(--muted); margin-top: 9px; text-transform: uppercase; font-size: 8px; letter-spacing: 1.7px; }
+    .presentation { display: grid; grid-template-columns: minmax(0, 1fr) 266px; align-items: start; gap: 26px; }
+    .games { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .game { position: relative; min-height: 252px; overflow: hidden; border: 1px solid #534733; border-radius: 12px; padding: 26px 23px 21px; isolation: isolate; background: linear-gradient(125deg, #1b1523, #301b28); }
+    .game.classic { border-color: #3c3556; background: linear-gradient(125deg, #181a29, #28233e); }
+    .game::before { content: ''; position: absolute; inset: auto -40px -110px auto; width: 260px; height: 260px; border-radius: 50%; background: #ba4d5022; filter: blur(25px); z-index: -1; }
+    .classic::before { background: #736ca42e; }
+    .game-number { position: absolute; top: 19px; right: 20px; font: 11px/1 Georgia, serif; color: #bcb2a2; }
+    .game-kicker { position: relative; z-index: 2; font-size: 8px; text-transform: uppercase; letter-spacing: 1.8px; color: #c0b8cc; }
+    .game h2 { position: relative; z-index: 2; margin: 12px 0; font-size: 36px; line-height: 1.02; letter-spacing: -1.2px; }
+    .game p { position: relative; z-index: 2; max-width: 155px; margin: 0; color: #d4cbdc; font-size: 11px; line-height: 1.65; }
+    .game-link { position: relative; z-index: 3; display: inline-flex; gap: 10px; align-items: center; margin-top: 25px; font-size: 11px; color: var(--gold); font-weight: 700; }
+    .game-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+    .fan { position: absolute; right: -8px; bottom: -28px; width: 190px; height: 178px; transform: rotate(5deg); z-index: 1; pointer-events: none; }
+    .card { position: absolute; bottom: 0; width: 83px; height: 133px; border-radius: 9px; border: 4px solid #fff; box-shadow: -5px 5px 12px #0005; transform-origin: 50% 110%; }
+    .card:nth-child(1) { left: 5px; bottom: -2px; transform: rotate(-24deg); }
+    .card:nth-child(2) { left: 56px; bottom: 10px; transform: rotate(-3deg); }
+    .card:nth-child(3) { left: 109px; bottom: 0; transform: rotate(17deg); }
+    .uno-card { color: #fff; background: #e7434e; }
+    .uno-card::before { content: ''; position: absolute; inset: 17px 3px; border: 3px solid #fff; border-radius: 50%; transform: rotate(25deg); background: #ffffff0c; }
+    .uno-card.blue { background: #05a8e4; }
+    .uno-card.green { background: #56ae4a; }
+    .corner { position: absolute; top: 1px; left: 4px; font-size: 19px; font-weight: 800; font-style: italic; line-height: 1.1; }
+    .corner.bottom { top: auto; left: auto; right: 4px; bottom: 1px; transform: rotate(180deg); }
+    .card-value { position: absolute; inset: 0; display: grid; place-items: center; font-size: 65px; font-weight: 800; font-style: italic; text-shadow: 2px 2px #333; line-height: 1; }
+    .classic .fan { right: -1px; bottom: -30px; }
+    .playing-card { color: #20232b; background: #fffdf5; border-color: #fffdf5; }
+    .playing-card.red { color: #ca3440; }
+    .playing-card .corner { font: 17px/1 Georgia, serif; text-align: center; left: 2px; }
+    .playing-card .corner.bottom { left: auto; right: 2px; }
+    .playing-card .card-value { font: 67px/1 Georgia, serif; text-shadow: none; }
+    .playing-card .royal { display: flex; flex-direction: column; justify-content: center; gap: 3px; font-size: 39px; }
+    .royal small { font-size: 22px; }
+    .modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-block: 16px 24px; }
+    .mode { border: 1px solid var(--line); border-radius: 9px; padding: 14px 16px; background: #131b26; }
+    .mode strong { display: block; font-size: 12px; color: #eaeaf0; }
+    .mode span { display: block; color: var(--muted); font-size: 10px; margin-top: 3px; }
+    .mode:first-child { border-color: #6a5a3c; }
+    .mode:first-child strong { color: var(--gold); }
+    .side-panel { background: #131b26; border: 1px solid var(--line); border-radius: 11px; padding: 23px 21px; }
+    .side-panel + .side-panel { margin-top: 16px; }
+    .contact-top { display: flex; align-items: center; justify-content: space-between; }
+    .contact-top span { color: var(--muted); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
+    .contact-top svg { width: 20px; height: 20px; color: var(--wa); fill: currentColor; }
+    .avatar { margin-top: 26px; width: 48px; height: 48px; display: grid; place-items: center; background: #242b2c; border: 1px solid #665d44; border-radius: 50%; font: 23px/1 Georgia, serif; color: var(--gold); }
+    .side-panel h2 { margin: 13px 0 3px; font-size: 22px; letter-spacing: -.6px; }
+    .side-panel p { color: var(--muted); font-size: 11px; line-height: 1.8; margin: 0; }
+    .side-panel .side-contact { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 16px; margin-top: 19px; border-top: 1px solid var(--line); color: var(--gold); font-size: 11px; font-weight: 700; }
+    .shared-symbol { font: 33px/1 Georgia, serif; color: #ab91c4; }
+    .side-panel h3 { font-size: 14px; margin: 16px 0 8px; font-weight: 600; }
+    .steps-section { scroll-margin-top: 25px; padding: 23px; border: 1px solid var(--line); border-radius: 11px; background: #131b26; }
+    .section-heading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 23px; }
+    .section-heading h2 { margin: 0; color: var(--gold); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; }
+    .section-heading span { color: #8a96a9; font-size: 10px; }
+    .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+    .step-number { display: inline-block; padding-bottom: 8px; border-bottom: 1px solid #6c5c3a; font: 25px/1 Georgia, serif; color: var(--gold); }
+    .step h3 { font-size: 13px; margin: 13px 0 6px; }
+    .step p { font-size: 11px; color: var(--muted); margin: 0; line-height: 1.8; }
+    .help-section { padding: 27px 0 20px; }
+    .help-section details { border-bottom: 1px solid var(--line); }
+    .help-section summary { list-style: none; cursor: pointer; font-size: 12px; padding: 15px 2px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+    .help-section summary::-webkit-details-marker { display: none; }
+    .help-section summary::after { content: '+'; color: var(--gold); font-size: 20px; line-height: 1; }
+    .help-section details[open] summary::after { content: '−'; }
+    .help-section details p { font-size: 12px; color: var(--muted); max-width: 600px; margin: 0 2px 17px; }
+    .footer { display: flex; gap: 20px; align-items: center; justify-content: space-between; border-top: 1px solid var(--line); padding-block: 26px; margin-top: 23px; margin-bottom: calc(106px + env(safe-area-inset-bottom)); }
+    .footer .brand-name { font-size: 20px; }
+    .footer .brand-mark { font-size: 32px; }
+    .footer small { font-size: 10px; color: #8f9aae; text-align: right; }
+    .contact-bar { position: fixed; z-index: 20; inset: auto 0 0; border-top: 1px solid #303544; background: #0d1018f7; backdrop-filter: blur(18px); padding: 13px 0 max(13px, env(safe-area-inset-bottom)); }
+    .contact-inner { display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+    .contact-caption { flex: 1; }
+    .contact-caption strong { display: block; font-size: 14px; }
+    .contact-caption span { display: block; color: var(--muted); font-size: 11px; margin-top: 2px; }
+    .whatsapp-button { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; width: 360px; padding: 11px 22px; color: #062715; background: var(--wa); border: 1px solid #59eea2; border-radius: 8px; font-size: 16px; font-weight: 700; box-shadow: 0 3px 22px #28df8312; transition: background .2s, transform .2s; }
+    .whatsapp-button:hover { background: #48e697; transform: translateY(-1px); }
+    .whatsapp-button svg { width: 23px; height: 23px; fill: currentColor; flex-shrink: 0; }
+    .whatsapp-button .arrow { margin-left: auto; }
+    .whatsapp-button .button-copy { margin-right: auto; }
+    .redirect-status { margin: 0; color: var(--muted); font-size: 11px; }
+    .redirect-status[hidden] { display: none; }
+    .status-area { max-width: 1180px; margin: 5px auto 0; text-align: right; }
+    @media (prefers-reduced-motion: no-preference) {
+      .fan { animation: card-arrival .85s cubic-bezier(.2,.7,.3,1) both; }
+      .classic .fan { animation-delay: .12s; }
+      @keyframes card-arrival { from { opacity: 0; translate: 0 22px; } to { opacity: 1; translate: 0 0; } }
+    }
+    @media (max-width: 1080px) {
+      .wrap { width: calc(100% - 56px); }
+      .header { gap: 40px; }
+      .presentation { grid-template-columns: minmax(0, 1fr) 234px; gap: 18px; }
+      .game { padding: 23px 19px; }
+      .fan { right: -38px; opacity: .92; }
+      .classic .fan { right: -35px; }
+      .game p { max-width: 125px; }
+      .hero-side { margin-right: 0; width: 230px; }
+      .game h2 { font-size: 31px; }
+    }
+    @media (max-width: 850px) {
+      .wrap { width: calc(100% - 40px); }
+      .header { min-height: 93px; gap: 30px; }
+      .nav { gap: 22px; }
+      .header-contact { padding: 9px 12px; }
+      .presentation { grid-template-columns: minmax(0, 1fr); }
+      .sidebar { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .side-panel + .side-panel { margin-top: 0; }
+      .contact-top { float: right; }
+      .avatar { margin-top: 0; }
+      .game { min-height: 247px; }
+      .fan { right: -4px; }
+      .classic .fan { right: 0; }
+      .game p { max-width: 150px; }
+      .hero-side { width: 205px; }
+      .hero-side p { font-size: 15px; }
+      .hero-symbol { font-size: 65px; }
+    }
+    @media (max-width: 620px) {
+      .wrap { width: calc(100% - 36px); }
+      .header { min-height: 85px; gap: 16px; }
+      .brand-name { font-size: 25px; }
+      .brand-mark { font-size: 36px; }
+      .brand-caption { font-size: 6px; letter-spacing: 3.4px; }
+      .nav { margin-left: auto; gap: 17px; font-size: 11px; }
+      .header-contact { display: none; }
+      .hero { padding-block: 34px 29px; }
+      h1 { font-size: clamp(48px, 12vw, 68px); margin-top: 15px; margin-bottom: 16px; letter-spacing: -3px; }
+      h1 em { letter-spacing: -2.5px; }
+      .hero-copy { font-size: 12px; }
+      .hero-side { display: none; }
+      .eyebrow { font-size: 9px; letter-spacing: 2px; }
+      .games { grid-template-columns: 1fr; gap: 13px; }
+      .game { min-height: 218px; padding: 24px; }
+      .game h2 { margin-block: 13px 10px; font-size: 35px; }
+      .game p { max-width: 155px; font-size: 11px; }
+      .fan { right: 6px; bottom: -28px; width: 186px; }
+      .classic .fan { right: 8px; }
+      .game-link { margin-top: 21px; }
+      .modes { gap: 7px; margin-block: 13px 20px; }
+      .mode { padding: 11px 9px; }
+      .mode strong { font-size: 10px; }
+      .mode span { font-size: 8px; }
+      .steps-section { padding: 20px; }
+      .steps { grid-template-columns: 1fr; gap: 21px; }
+      .step { display: grid; grid-template-columns: 32px 1fr; column-gap: 16px; }
+      .step-number { grid-row: span 2; align-self: start; }
+      .step h3 { margin: 0 0 5px; }
+      .section-heading { margin-bottom: 22px; }
+      .section-heading span { font-size: 9px; }
+      .sidebar { grid-template-columns: 1fr; }
+      .sidebar .side-panel:last-child { display: flex; align-items: center; gap: 20px; padding-block: 20px; }
+      .side-panel h3 { margin-top: 0; }
+      .contact-caption strong { font-size: 11px; }
+      .contact-caption span { font-size: 9px; }
+      .contact-inner { gap: 12px; }
+      .whatsapp-button { flex: 0 0 58%; width: auto; min-height: 51px; padding: 10px 14px; font-size: 14px; gap: 8px; }
+      .whatsapp-button svg { width: 21px; height: 21px; }
+      .whatsapp-button .arrow { display: none; }
+      .whatsapp-button .button-copy { margin-right: 0; }
+      .status-area { text-align: center; padding-inline: 18px; }
+      .redirect-status { font-size: 10px; }
+      .footer { margin-bottom: calc(113px + env(safe-area-inset-bottom)); }
+      .footer small { max-width: 155px; font-size: 9px; }
+    }
+    @media (max-width: 360px) {
+      .nav { gap: 12px; font-size: 10px; }
+      .brand { gap: 6px; }
+      .brand-name { font-size: 22px; }
+      .game { padding-inline: 19px; }
+      .game p { max-width: 135px; }
+      .fan, .classic .fan { right: -24px; }
+      .contact-caption span { max-width: 100px; }
+      .whatsapp-button { flex-basis: 57%; font-size: 13px; padding-inline: 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
   </style>
 </head>
 <body>
-  <iframe id="casino" title="Casino Zeus" loading="eager"
-    src="https://casinozeus.life/"
-    sandbox="allow-scripts allow-same-origin allow-forms"
-    referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  <a class="skip" href="#inicio">Ir al contenido</a>
+  <svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="whatsapp" viewBox="0 0 24 24"><path d="M20.52 3.48A11.91 11.91 0 0 0 12.04 0C5.43 0 .05 5.38.05 12a11.9 11.9 0 0 0 1.6 5.97L0 24l6.17-1.62a12 12 0 0 0 5.87 1.49h.01C18.66 23.87 24 18.49 24 11.88a11.8 11.8 0 0 0-3.48-8.4ZM12.04 21.85a9.96 9.96 0 0 1-5.08-1.39l-.36-.21-3.66.96.98-3.57-.24-.37a9.95 9.95 0 0 1-1.52-5.28c0-5.5 4.47-9.98 9.98-9.98 2.67 0 5.18 1.04 7.06 2.93a9.88 9.88 0 0 1 2.92 7.04c0 5.5-4.53 9.87-10.08 9.87Zm5.48-7.48c-.3-.15-1.77-.87-2.05-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.95 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.39-1.46-.88-.79-1.47-1.76-1.64-2.06-.17-.3-.02-.46.13-.61.14-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.49s1.07 2.88 1.22 3.08c.15.2 2.1 3.21 5.09 4.5.71.31 1.26.5 1.69.64.71.23 1.35.2 1.86.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35Z"/></symbol>
+  </svg>
 
-  <footer class="barra-contacto" aria-label="Contacto con el Administrador Zeta">
-    <p class="administrador">Administrador <strong>Zeta</strong></p>
-    <a id="contacto" class="crear-usuario"
-      href="whatsapp://send?text=Hola%20administrador%20Zeta%2C%20me%20puedes%20pasar%20informacion.&amp;phone=5492996820589"
-      aria-label="Crear usuario por WhatsApp con el Administrador Zeta">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path d="M20.52 3.48A11.91 11.91 0 0 0 12.04 0C5.43 0 .05 5.38.05 12a11.9 11.9 0 0 0 1.6 5.97L0 24l6.17-1.62a12 12 0 0 0 5.87 1.49h.01C18.66 23.87 24 18.49 24 11.88a11.8 11.8 0 0 0-3.48-8.4ZM12.04 21.85a9.96 9.96 0 0 1-5.08-1.39l-.36-.21-3.66.96.98-3.57-.24-.37a9.95 9.95 0 0 1-1.52-5.28c0-5.5 4.47-9.98 9.98-9.98 2.67 0 5.18 1.04 7.06 2.93a9.88 9.88 0 0 1 2.92 7.04c0 5.5-4.53 9.87-10.08 9.87Zm5.48-7.48c-.3-.15-1.77-.87-2.05-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.95 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.39-1.46-.88-.79-1.47-1.76-1.64-2.06-.17-.3-.02-.46.13-.61.14-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.49s1.07 2.88 1.22 3.08c.15.2 2.1 3.21 5.09 4.5.71.31 1.26.5 1.69.64.71.23 1.35.2 1.86.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35Z"/>
-      </svg>
-      <span>Crear usuario</span>
+  <div class="responsible"><span>+18</span> Jugá con responsabilidad.</div>
+  <header class="header wrap">
+    <a class="brand" href="#inicio" aria-label="Al Baje! Inicio">
+      <span class="brand-mark" aria-hidden="true">♠</span>
+      <span><span class="brand-name">Al Baje<b>!</b></span><span class="brand-caption">Club de cartas</span></span>
     </a>
-    <p id="respaldo" class="aviso" hidden role="status" aria-live="polite">Si WhatsApp no se abrió, tocá «Crear usuario» para hablar con Zeta.</p>
+    <nav class="nav" aria-label="Navegación principal"><a href="#juegos">Juegos</a><a href="#como-empezar">Cómo empezar</a></nav>
+    <a class="header-contact" data-whatsapp href="whatsapp://send?text=Hola%20administrador%20Zeta%2C%20me%20puedes%20pasar%20informacion.&amp;phone=5492996820589">Contactar a Zeta <span class="arrow" aria-hidden="true">↗</span></a>
+  </header>
+
+  <main id="inicio" class="wrap">
+    <section class="hero" aria-labelledby="hero-title">
+      <div>
+        <span class="eyebrow">Tu club, tu jugada</span>
+        <h1 id="hero-title">Cartas sobre<br>la <em>mesa.</em></h1>
+        <p class="hero-copy">Elegí tu juego. Encontrá tu mesa.<br>Tu próxima jugada empieza en Al Baje!</p>
+      </div>
+      <div class="hero-side" aria-hidden="true"><span class="hero-symbol">♠</span><p>Una mesa.<br>Muchas jugadas.<small>UNO · Cartas Clásicas</small></p></div>
+    </section>
+
+    <div class="presentation">
+      <div>
+        <section id="juegos" class="games" aria-label="Conocé nuestros juegos">
+          <article class="game uno">
+            <span class="game-number">01 /</span><span class="game-kicker">Color, número y acción</span>
+            <h2>UNO</h2><p>Cada carta cuenta.<br>Elegí tu color y prepará<br>tu próxima jugada.</p>
+            <a class="game-link" data-whatsapp href="whatsapp://send?text=Hola%20administrador%20Zeta%2C%20me%20puedes%20pasar%20informacion.&amp;phone=5492996820589">Quiero jugar <span class="arrow" aria-hidden="true">↗</span></a>
+            <div class="fan" aria-hidden="true">
+              <div class="card uno-card"><span class="corner">5</span><span class="card-value">5</span><span class="corner bottom">5</span></div>
+              <div class="card uno-card blue"><span class="corner">2</span><span class="card-value">2</span><span class="corner bottom">2</span></div>
+              <div class="card uno-card green"><span class="corner">7</span><span class="card-value">7</span><span class="corner bottom">7</span></div>
+            </div>
+          </article>
+          <article class="game classic">
+            <span class="game-number">02 /</span><span class="game-kicker">Piernas y escaleras</span>
+            <h2>Cartas<br>Clásicas</h2><p>Combiná tus cartas.<br>La estrategia está<br>en tus manos.</p>
+            <a class="game-link" data-whatsapp href="whatsapp://send?text=Hola%20administrador%20Zeta%2C%20me%20puedes%20pasar%20informacion.&amp;phone=5492996820589">Quiero jugar <span class="arrow" aria-hidden="true">↗</span></a>
+            <div class="fan" aria-hidden="true">
+              <div class="card playing-card"><span class="corner">A<br>♠</span><span class="card-value">♠</span><span class="corner bottom">A<br>♠</span></div>
+              <div class="card playing-card red"><span class="corner">K<br>♥</span><span class="card-value royal"><small>♛</small>K<small>♥</small></span><span class="corner bottom">K<br>♥</span></div>
+              <div class="card playing-card"><span class="corner">Q<br>♣</span><span class="card-value royal"><small>♛</small>Q<small>♣</small></span><span class="corner bottom">Q<br>♣</span></div>
+            </div>
+          </article>
+        </section>
+
+        <div class="modes" aria-label="Tu experiencia en Al Baje!">
+          <div class="mode"><strong>Tu juego</strong><span>UNO o Cartas Clásicas</span></div>
+          <div class="mode"><strong>Tu usuario</strong><span>Pedilo por WhatsApp</span></div>
+          <div class="mode"><strong>Tu contacto</strong><span>Administrador Zeta</span></div>
+        </div>
+
+        <section id="como-empezar" class="steps-section" aria-labelledby="steps-title">
+          <div class="section-heading"><h2 id="steps-title">Sentate a la mesa</h2><span>Empezá en 3 pasos</span></div>
+          <div class="steps">
+            <div class="step"><span class="step-number">01</span><h3>Escribile a Zeta</h3><p>Tocá «Crear usuario» y abrí el chat directo por WhatsApp.</p></div>
+            <div class="step"><span class="step-number">02</span><h3>Creá tu usuario</h3><p>Consultá cómo registrarte y recibí los datos para acceder.</p></div>
+            <div class="step"><span class="step-number">03</span><h3>Elegí tu juego</h3><p>Conocé las modalidades y encontrá tu próxima mesa.</p></div>
+          </div>
+        </section>
+
+        <section class="help-section" aria-label="Antes de empezar">
+          <details><summary>¿Cómo consigo mi usuario?</summary><p>Contactá al administrador Zeta desde cualquiera de los botones de WhatsApp. Te va a explicar cómo crear tu usuario y acceder a la plataforma.</p></details>
+          <details><summary>¿Dónde consulto las modalidades y condiciones?</summary><p>Escribile a Zeta para conocer las salas, las modalidades y las condiciones vigentes antes de comenzar.</p></details>
+        </section>
+      </div>
+
+      <aside class="sidebar" aria-label="Atención y contacto">
+        <section class="side-panel">
+          <div class="contact-top"><span>Tu contacto</span><svg aria-hidden="true"><use href="#whatsapp"/></svg></div>
+          <div class="avatar" aria-hidden="true">Z</div>
+          <h2>Administrador Zeta</h2><p>Tu primer paso para sumarte.<br>Usuarios e información por WhatsApp.</p>
+          <a class="side-contact" data-whatsapp href="whatsapp://send?text=Hola%20administrador%20Zeta%2C%20me%20puedes%20pasar%20informacion.&amp;phone=5492996820589">+54 9 299 682-0589 <span class="arrow" aria-hidden="true">↗</span></a>
+        </section>
+        <section class="side-panel"><div class="shared-symbol" aria-hidden="true">♣</div><div><h3>Una mesa compartida.</h3><p>El juego que conocés, con una nueva forma de encontrarte a jugar.</p></div></section>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="footer wrap">
+    <a class="brand" href="#inicio" aria-label="Volver al inicio de Al Baje!"><span class="brand-mark" aria-hidden="true">♠</span><span class="brand-name">Al Baje<b>!</b></span></a>
+    <small>Club de cartas · Solo mayores de 18 años.<br>Jugá con responsabilidad.</small>
   </footer>
+
+  <div class="contact-bar" aria-label="Crear usuario con Zeta">
+    <div class="contact-inner wrap">
+      <div class="contact-caption"><strong>Tu lugar en la mesa.</strong><span>Creá tu usuario con Zeta.</span></div>
+      <a id="contacto" class="whatsapp-button" data-whatsapp href="whatsapp://send?text=Hola%20administrador%20Zeta%2C%20me%20puedes%20pasar%20informacion.&amp;phone=5492996820589" aria-label="Crear usuario por WhatsApp con el Administrador Zeta"><svg aria-hidden="true"><use href="#whatsapp"/></svg><span class="button-copy">Crear usuario</span><span class="arrow" aria-hidden="true">↗</span></a>
+    </div>
+    <div class="status-area"><p id="respaldo" class="redirect-status" hidden role="status" aria-live="polite">Si WhatsApp no se abrió, tocá «Crear usuario» para hablar con Zeta.</p></div>
+  </div>
 
   <script>
     (function () {
       'use strict';
 
       // Mismo enlace directo de Quini 6: whatsapp://send?text=...&phone=...
-      // El número y el mensaje están en el botón, que funciona también sin JavaScript.
+      // El botón funciona también sin JavaScript. El mensaje queda preparado,
+      // y es la persona quien decide enviarlo dentro de WhatsApp.
       var espera = 20000;
-      var respaldo = document.getElementById('respaldo');
       var contacto = document.getElementById('contacto');
+      var respaldo = document.getElementById('respaldo');
       var redireccion = null;
 
       function cancelarRedireccion() {
@@ -63,13 +347,16 @@
         try {
           window.location.href = contacto.href;
         } catch (error) {
-          // Algunos navegadores exigen un toque para abrir una app externa.
-          // El botón permanece visible y conserva su enlace directo.
+          // Si el navegador exige un toque, el botón sigue disponible abajo.
         }
       }
 
-      // No interceptamos el enlace: el toque abre WhatsApp mediante el navegador.
-      contacto.addEventListener('click', cancelarRedireccion);
+      // Conservamos la navegación nativa del enlace para que el toque del
+      // usuario pueda abrir WhatsApp. No hay un segundo salto a WhatsApp Web.
+      var enlaces = document.querySelectorAll('[data-whatsapp]');
+      for (var i = 0; i < enlaces.length; i++) {
+        enlaces[i].addEventListener('click', cancelarRedireccion);
+      }
       document.addEventListener('visibilitychange', function () {
         if (document.hidden) cancelarRedireccion();
       });
